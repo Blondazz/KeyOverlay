@@ -2,7 +2,7 @@
 # KeyOverlay
  A simple key overlay for osu! streaming
 To change the keys used please use config.txt
-# [Download Link](https://drive.google.com/file/d/1sf7gY4CrxdEy-csV9VGPWvYu08k_-N9F/view?usp=sharing)
+# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v0.1)
 
 
 ## config.txt properties
