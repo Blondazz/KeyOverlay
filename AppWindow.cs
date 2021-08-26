@@ -16,9 +16,10 @@ namespace KeyOverlay {
         private readonly float _barSpeed;
         private readonly float _ratioX;
         private readonly float _ratioY;
+        private readonly int _margin;
 
-        private int _leftHold = 0;
-        private int _rightHold = 0;
+        private int _leftHold;
+        private int _rightHold;
         public AppWindow() {
             var config = ReadConfig();
             var windowWidth = config["windowWidth"];
@@ -39,6 +40,7 @@ namespace KeyOverlay {
             if (config["displayKey2"] != "")
                 _k2Key.KeyLetter = config["displayKey2"];
             _barSpeed = float.Parse(config["barSpeed"], CultureInfo.InvariantCulture);
+            _margin = int.Parse(config["margin"]);
         }
 
         private Dictionary<string, string> ReadConfig() {
@@ -164,8 +166,8 @@ namespace KeyOverlay {
             square.FillColor = Color.Transparent;
             square.OutlineColor = Color.White;
             square.OutlineThickness = 4;
-            square.Position = left ? new Vector2f(65 *_ratioX, 760 * _ratioY) 
-                : new Vector2f(_window.Size.X - square.Size.X - (65 * _ratioX), 760 * _ratioY);
+            square.Position = left ? new Vector2f(_margin *_ratioX, 760 * _ratioY) 
+                : new Vector2f(_window.Size.X - square.Size.X - (_margin * _ratioX), 760 * _ratioY);
             return square;
         }
 
