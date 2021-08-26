@@ -17,5 +17,5 @@ barSpeed - Adjust the speed at which the bars are travelling upwards.
 
 ![](https://puu.sh/I6Kg1/4ff86be176.gif)
 
-based on a similar app by an unknown author (if you are the author dm me so i can credit you)
+based on a similar app by an unknown author (if you are the author dm me so I can credit you)
 
