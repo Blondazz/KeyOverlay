@@ -5,4 +5,5 @@ displayKey2=
 windowHeight=960
 windowWidth=480
 barSpeed=5
-margin=80
+margin=65
+outlineThickness=6

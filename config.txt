@@ -6,3 +6,4 @@ windowHeight=960
 windowWidth=480
 barSpeed=5
 margin=65
+outlineThickness=6

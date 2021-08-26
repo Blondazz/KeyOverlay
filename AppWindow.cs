@@ -17,6 +17,7 @@ namespace KeyOverlay {
         private readonly float _ratioX;
         private readonly float _ratioY;
         private readonly int _margin;
+        private readonly int _outlineThickness;
 
         private int _leftHold;
         private int _rightHold;
@@ -41,6 +42,7 @@ namespace KeyOverlay {
                 _k2Key.KeyLetter = config["displayKey2"];
             _barSpeed = float.Parse(config["barSpeed"], CultureInfo.InvariantCulture);
             _margin = int.Parse(config["margin"]);
+            _outlineThickness = int.Parse(config["outlineThickness"]);
         }
 
         private Dictionary<string, string> ReadConfig() {
@@ -155,8 +157,8 @@ namespace KeyOverlay {
         }
 
         private RectangleShape CreateRect(RectangleShape square) {
-            RectangleShape rect = new RectangleShape(new Vector2f(square.Size.X+8, 0));
-            rect.Position = new Vector2f(square.Position.X-4, square.Position.Y+1);
+            RectangleShape rect = new RectangleShape(new Vector2f(square.Size.X+_outlineThickness*2, 0));
+            rect.Position = new Vector2f(square.Position.X-_outlineThickness, square.Position.Y+1+(4-square.OutlineThickness));
             rect.FillColor = square.FillColor;
             return rect;
         }
@@ -165,7 +167,7 @@ namespace KeyOverlay {
             RectangleShape square = new RectangleShape(new Vector2f(140f * _ratioX, 140f * _ratioY));
             square.FillColor = Color.Transparent;
             square.OutlineColor = Color.White;
-            square.OutlineThickness = 4;
+            square.OutlineThickness = _outlineThickness;
             square.Position = left ? new Vector2f(_margin *_ratioX, 760 * _ratioY) 
                 : new Vector2f(_window.Size.X - square.Size.X - (_margin * _ratioX), 760 * _ratioY);
             return square;
