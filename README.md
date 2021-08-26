@@ -15,6 +15,8 @@ windowHeight, windowWidth - used to change the resolution of the program, the re
 barSpeed - Adjust the speed at which the bars are travelling upwards.
 
 margin - Adjust the margin of the keys from the sides (in pixels in default resolution, divided by window width ratio if changed)
+
+outlineThickness - change the thickness of a square border
 # GIF Preview
 
 ![](https://puu.sh/I6Kg1/4ff86be176.gif)
