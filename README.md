@@ -13,6 +13,8 @@ displayKey1, displayKey2 - If the name of the key you are using is too large, or
 windowHeight, windowWidth - used to change the resolution of the program, the recommended ratio of H:W is 2:1.
 
 barSpeed - Adjust the speed at which the bars are travelling upwards.
+
+margin - Adjust the margin of the keys from the sides (in pixels in default resolution, divided by window ratio if changed)
 # GIF Preview
 
 ![](https://puu.sh/I6Kg1/4ff86be176.gif)
