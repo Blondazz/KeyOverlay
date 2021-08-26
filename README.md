@@ -1,9 +1,8 @@
 
 # KeyOverlay
  A simple key overlay for osu! streaming
-
 To change the keys used please use config.txt
-# [Download Link](https://drive.google.com/file/d/1BZqceYr-wpRRbtCfcwg4tnuJeer7MsnL/view?usp=sharing)
+# [Download Link](https://drive.google.com/file/d/1sf7gY4CrxdEy-csV9VGPWvYu08k_-N9F/view?usp=sharing)
 
 
 ## config.txt properties
@@ -17,3 +16,6 @@ barSpeed - Adjust the speed at which the bars are travelling upwards.
 # GIF Preview
 
 ![](https://puu.sh/I6Kg1/4ff86be176.gif)
+
+based on a similar app by an unknown author (if you are the author dm me so i can credit you)
+
