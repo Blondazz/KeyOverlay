@@ -1,0 +1,7 @@
+﻿key1=Z
+key2=X
+displayKey1=
+displayKey2=
+windowHeight=960
+windowWidth=480
+barSpeed=5
