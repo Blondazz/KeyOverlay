@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks.Dataflow;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -19,9 +16,6 @@ namespace KeyOverlay {
         private readonly float _barSpeed;
         private readonly float _ratioX;
         private readonly float _ratioY;
-
-        private bool _leftPressed = false;
-        private bool _rightPressed = false;
 
         private int _leftHold = 0;
         private int _rightHold = 0;
@@ -85,22 +79,18 @@ namespace KeyOverlay {
                 squareLeft.FillColor = Color.Transparent;
                 squareRight.FillColor = Color.Transparent;
                 if (Keyboard.IsKeyPressed(_k1Key.activatorKey)) {
-                    _leftPressed = true;
                     _leftHold++;
                     squareLeft.FillColor = new Color(0xff, 0xff, 0xff, 100);
                 }
                 else {
                     _leftHold = 0;
-                    _leftPressed = false;
                 }
                 if (Keyboard.IsKeyPressed(_k2Key.activatorKey)) {
-                    _rightPressed = true;
                     _rightHold++;
                     squareRight.FillColor = new Color(0xff, 0xff, 0xff, 100);
                 }
                 else {
                     _rightHold = 0;
-                    _rightPressed = false;
                 }
 
                 MoveRectangles(rectListLeft, rectListRight, _leftHold, _rightHold, squareLeft, squareRight);
