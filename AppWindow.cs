@@ -65,11 +65,12 @@ namespace KeyOverlay {
             _window.Closed += OnClose;
             _window.SetFramerateLimit(144);
 
-            RectangleShape squareLeft = CreateSquare(true);
-            RectangleShape squareRight = CreateSquare(false);
+            RectangleShape squareLeft = CreateItems.CreateSquare(true, _outlineThickness, _ratioX, _ratioY, _margin, _window);
+            RectangleShape squareRight =
+                CreateItems.CreateSquare(false, _outlineThickness, _ratioX, _ratioY, _margin, _window);
 
-            Text textLeft = CreateText(_k1Key.KeyLetter, squareLeft);
-            Text textRight = CreateText(_k2Key.KeyLetter, squareRight);
+            Text textLeft = CreateItems.CreateText(_k1Key.KeyLetter, squareLeft);
+            Text textRight = CreateItems.CreateText(_k2Key.KeyLetter, squareRight);
 
             Sprite image = new Sprite(new Texture(@"Resources\fading.png"));
             image.Scale = new Vector2f(image.Scale.X * _window.Size.X / 480f, image.Scale.Y *_ratioY);
@@ -122,7 +123,7 @@ namespace KeyOverlay {
             RectangleShape squareLeft, RectangleShape squareRight) {
 
             if (leftHold == 1) {
-                var rect = CreateRect(squareLeft);
+                var rect = CreateItems.CreateRect(squareLeft, _outlineThickness, _barSpeed);
                 rectListLeft.Add(rect);
             }
             else if (leftHold > 1) {
@@ -131,7 +132,7 @@ namespace KeyOverlay {
             }
 
             if (rightHold == 1) {
-                var rect = CreateRect(squareRight);
+                var rect = CreateItems.CreateRect(squareRight, _outlineThickness, _barSpeed);
                 rectListRight.Add(rect);
             }
             else if (rightHold > 1) {
@@ -156,34 +157,6 @@ namespace KeyOverlay {
             }
         }
 
-        private RectangleShape CreateRect(RectangleShape square) {
-            RectangleShape rect = new RectangleShape(new Vector2f(square.Size.X+_outlineThickness*2, 0));
-            rect.Position = new Vector2f(square.Position.X-_outlineThickness, square.Position.Y+1+(4-square.OutlineThickness));
-            rect.FillColor = square.FillColor;
-            return rect;
-        }
-
-        private RectangleShape CreateSquare(bool left) {
-            RectangleShape square = new RectangleShape(new Vector2f(140f * _ratioX, 140f * _ratioY));
-            square.FillColor = Color.Transparent;
-            square.OutlineColor = Color.White;
-            square.OutlineThickness = _outlineThickness;
-            square.Position = left ? new Vector2f(_margin *_ratioX, 760 * _ratioY) 
-                : new Vector2f(_window.Size.X - square.Size.X - (_margin * _ratioX), 760 * _ratioY);
-            return square;
-        }
-
-        private Text CreateText(string key, RectangleShape square) {
-            Font font = new Font(@"Resources\consolab.ttf");
-            Text text = new Text(key, font);
-            text.CharacterSize = (uint)(50 * square.Size.X / 140);
-            text.Style = Text.Styles.Bold;
-
-            text.Origin = new Vector2f(text.GetLocalBounds().Width / 2f, 32*square.Size.X/140f);
-            text.Position = new Vector2f(square.GetGlobalBounds().Left+square.OutlineThickness+square.Size.X/2f, 
-                square.GetGlobalBounds().Top+square.OutlineThickness+square.Size.Y/2f);
-            
-            return text;
-        }
+        
     }
 }
