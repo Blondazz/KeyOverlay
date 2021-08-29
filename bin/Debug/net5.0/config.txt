@@ -1,9 +1,0 @@
-﻿key1=C
-key2=V
-displayKey1=
-displayKey2=
-windowHeight=700
-windowWidth=240
-barSpeed=5
-margin=65
-outlineThickness=5
