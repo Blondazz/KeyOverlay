@@ -21,7 +21,7 @@ namespace KeyOverlay {
         private readonly int _margin = 0;
         private readonly int _outlineThickness = 0;
         private readonly uint _maxFPS = 0;
-        private Clock clock = new Clock();
+        private Clock _clock = new Clock();
         private int _leftHold = 0;
         private int _rightHold = 0;
         public AppWindow() {
@@ -166,8 +166,8 @@ namespace KeyOverlay {
         private void MoveRectangles(List<RectangleShape> rectListLeft, List<RectangleShape> rectListRight, int leftHold, int rightHold, 
             RectangleShape squareLeft, RectangleShape squareRight) {
 
-            //float dt = clock.Restart().AsSeconds();
-            float moveDist = clock.Restart().AsSeconds() * _barSpeed;
+            //float dt = _clock.Restart().AsSeconds();
+            float moveDist = _clock.Restart().AsSeconds() * _barSpeed;
             
 
             //branchless might make this more efficient
