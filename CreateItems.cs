@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using System.IO;
 
 namespace KeyOverlay {
     public static class CreateItems {
@@ -22,7 +23,7 @@ namespace KeyOverlay {
         }
 
         public static Text CreateText(string key, RectangleShape square) {
-            Font font = new Font(@"Resources\consolab.ttf");
+            Font font = new Font(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources", "consolab.ttf")));
             Text text = new Text(key, font);
             text.CharacterSize = (uint)(50 * square.Size.X / 140);
             text.Style = Text.Styles.Bold;

@@ -113,7 +113,7 @@ namespace KeyOverlay {
                 textRight = CreateItems.CreateText(_m2Key.KeyLetter, squareRight);
             }
 
-            Sprite image = new Sprite(new Texture(@"Resources\fading.png"));
+            Sprite image = new Sprite(new Texture(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources", "fading.png"))));
             image.Scale = new Vector2f(image.Scale.X * _window.Size.X / 480f, image.Scale.Y *_ratioY);
 
             List<RectangleShape> rectListLeft = new();
