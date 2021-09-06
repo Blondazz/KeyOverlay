@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+//performance of this might be poor, unityengine's time library might be better
 using System.Diagnostics;
+
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
