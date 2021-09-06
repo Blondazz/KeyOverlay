@@ -1,9 +1,10 @@
-﻿key1=Z
-key2=X
+﻿key1=Right
+key2=PageDown
 displayKey1=
 displayKey2=
 windowHeight=960
 windowWidth=480
-barSpeed=5
+barSpeed=400
 margin=65
 outlineThickness=6
+maxFPS=600

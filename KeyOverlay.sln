@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyOverlay", "KeyOverlay.csproj", "{6BEE773B-190C-42B3-8DA0-A7144508FBC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BEE773B-190C-42B3-8DA0-A7144508FBC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BEE773B-190C-42B3-8DA0-A7144508FBC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BEE773B-190C-42B3-8DA0-A7144508FBC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BEE773B-190C-42B3-8DA0-A7144508FBC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE852A99-8D7E-4553-81CD-6E2E881E60E6}
+	EndGlobalSection
+EndGlobal
