@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using SFML.Graphics;
 using SFML.Window;
 
-namespace KeyOverlay {
-    public class Key {
-        public float Size { get; set; }
-        public float PosX { get; set; }
-        public float PosY { get; set; }
-        public bool IsClicked { get; set; }
+namespace KeyOverlay
+{
+    public class Key
+    {
+        public int Hold { get; set; }
+        public List<RectangleShape> BarList = new();
         public string KeyLetter;
+        public readonly Keyboard.Key ActivatorKey;
+        public int Counter = 0;
 
-        public readonly Keyboard.Key activatorKey;
-
-
-        public Key(string key) {
-            Size = 150f;
+        public Key(string key)
+        {
             KeyLetter = key;
-            Enum.TryParse(key, out activatorKey);
+            Enum.TryParse(key, out ActivatorKey);
         }
     }
 }

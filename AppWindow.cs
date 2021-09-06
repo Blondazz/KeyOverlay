@@ -7,156 +7,189 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace KeyOverlay {
+namespace KeyOverlay
+{
     public class AppWindow
     {
         private readonly RenderWindow _window;
-        private readonly Key _k1Key;
-        private readonly Key _k2Key;
+        private readonly List<Key> _keyList = new();
+        private readonly List<RectangleShape> _squareList;
         private readonly float _barSpeed;
         private readonly float _ratioX;
         private readonly float _ratioY;
-        private readonly int _margin;
         private readonly int _outlineThickness;
+        private readonly Color _backgroundColor;
+        private readonly Color _keyBackgroundColor;
+        private readonly Color _barColor;
+        private readonly Color _fontColor;
+        private readonly Sprite _background;
+        private readonly bool _fading;
+        private readonly bool _counter;
+        private readonly List<Drawable> _staticDrawables = new();
 
-        private int _leftHold;
-        private int _rightHold;
-        public AppWindow() {
+
+        public AppWindow()
+        {
             var config = ReadConfig();
             var windowWidth = config["windowWidth"];
             var windowHeight = config["windowHeight"];
-            _window = new RenderWindow(new VideoMode(uint.Parse(windowWidth!), uint.Parse(windowHeight!)), 
+            _window = new RenderWindow(new VideoMode(uint.Parse(windowWidth!), uint.Parse(windowHeight!)),
                 "KeyOverlay", Styles.Default);
-            
 
+            //calculate screen ratio relative to original program size for easy resizing
             _ratioX = float.Parse(windowWidth) / 480f;
             _ratioY = float.Parse(windowHeight) / 960f;
 
-            var k1 = config["key1"];
-            var k2 = config["key2"];
-            _k1Key = new Key(k1);
-            _k2Key = new Key(k2);
-            if (config["displayKey1"] != "")
-                _k1Key.KeyLetter = config["displayKey1"];
-            if (config["displayKey2"] != "")
-                _k2Key.KeyLetter = config["displayKey2"];
             _barSpeed = float.Parse(config["barSpeed"], CultureInfo.InvariantCulture);
-            _margin = int.Parse(config["margin"]);
             _outlineThickness = int.Parse(config["outlineThickness"]);
+            _backgroundColor = CreateItems.CreateColor(config["backgroundColor"]);
+            _keyBackgroundColor = CreateItems.CreateColor(config["keyColor"]);
+            _barColor = CreateItems.CreateColor(config["barColor"]);
+
+            //get background image if in config
+            if (config["backgroundImage"] != "")
+            {
+                _background = new Sprite(new Texture(
+                    Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources",
+                        config["backgroundImage"]))));
+                
+            }
+
+            //create keys which will be used to create the squares and text
+            var keyAmount = int.Parse(config["keyAmount"]);
+            for (var i = 1; i <= keyAmount; i++)
+            {
+                var key = new Key(config[$"key" + i]);
+                if (config.ContainsKey($"displayKey" + i))
+                    if (config[$"displayKey" + i] != "")
+                        key.KeyLetter = config[$"displayKey" + i];
+                _keyList.Add(key);
+            }
+
+            //create squares and add them to _staticDrawables list
+            var outlineColor = CreateItems.CreateColor(config["borderColor"]);
+            var marginBottom = int.Parse(config["marginBottom"]);
+            var keySize = int.Parse(config["keySize"]);
+            var margin = int.Parse(config["margin"]);
+            _squareList = CreateItems.CreateKeys(keyAmount, _outlineThickness, keySize, _ratioX, _ratioY, margin,
+                marginBottom,
+                _window, _keyBackgroundColor, outlineColor);
+            foreach (var square in _squareList) _staticDrawables.Add(square);
+
+            //create text and add it ti _staticDrawables list
+            _fontColor = CreateItems.CreateColor(config["fontColor"]);
+            for (var i = 0; i < keyAmount; i++)
+            {
+                var text = CreateItems.CreateText(_keyList.ElementAt(i).KeyLetter, _squareList.ElementAt(i),
+                    _fontColor, false);
+                _staticDrawables.Add(text);
+            }
+
+            if (config["fading"] == "yes")
+                _fading = true;
+            if (config["keyCounter"] == "yes")
+                _counter = true;
         }
 
-        private Dictionary<string, string> ReadConfig() {
-            Dictionary<string, string> objectDict = new Dictionary<string, string>();
+        private Dictionary<string, string> ReadConfig()
+        {
+            var objectDict = new Dictionary<string, string>();
             var file = File.ReadLines("config.txt").ToArray();
-            foreach (var s in file) {
-                objectDict.Add(s.Split("=")[0], s.Split("=")[1]);
-            }
+            foreach (var s in file) objectDict.Add(s.Split("=")[0], s.Split("=")[1]);
             return objectDict;
         }
-       
-        private void OnClose(object sender, EventArgs e) {
+
+        private void OnClose(object sender, EventArgs e)
+        {
             _window.Close();
         }
 
-        public void Run() {
-
-            Clock clock = new Clock();
-            Event eEvent;
+        public void Run()
+        {
             _window.Closed += OnClose;
             _window.SetFramerateLimit(144);
 
-            RectangleShape squareLeft = CreateItems.CreateSquare(true, _outlineThickness, _ratioX, _ratioY, _margin, _window);
-            RectangleShape squareRight =
-                CreateItems.CreateSquare(false, _outlineThickness, _ratioX, _ratioY, _margin, _window);
+            //Creating a sprite for the fading effect
+            var fadingList = Fading.GetBackgroundColorFadingTexture(_backgroundColor, _window.Size.X, _ratioY);
+            var fadingTexture = new RenderTexture(_window.Size.X, (uint)(255 * 2 * _ratioY));
+            fadingTexture.Clear(Color.Transparent);
+            if (_fading)
+                foreach (var sprite in fadingList)
+                    fadingTexture.Draw(sprite);
+            fadingTexture.Display();
+            var fadingSprite = new Sprite(fadingTexture.Texture);
 
-            Text textLeft = CreateItems.CreateText(_k1Key.KeyLetter, squareLeft);
-            Text textRight = CreateItems.CreateText(_k2Key.KeyLetter, squareRight);
 
-            Sprite image = new Sprite(new Texture(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources", "fading.png"))));
-            image.Scale = new Vector2f(image.Scale.X * _window.Size.X / 480f, image.Scale.Y *_ratioY);
-
-            List<RectangleShape> rectListLeft = new();
-            List<RectangleShape> rectListRight = new();
-
-            while (_window.IsOpen) {        
-                _window.Clear();
+            while (_window.IsOpen)
+            {
+                _window.Clear(_backgroundColor);
                 _window.DispatchEvents();
-                squareLeft.FillColor = Color.Transparent;
-                squareRight.FillColor = Color.Transparent;
-                if (Keyboard.IsKeyPressed(_k1Key.activatorKey)) {
-                    _leftHold++;
-                    squareLeft.FillColor = new Color(0xff, 0xff, 0xff, 100);
-                }
-                else {
-                    _leftHold = 0;
-                }
-                if (Keyboard.IsKeyPressed(_k2Key.activatorKey)) {
-                    _rightHold++;
-                    squareRight.FillColor = new Color(0xff, 0xff, 0xff, 100);
-                }
-                else {
-                    _rightHold = 0;
+                //if no keys are being held fill the square with bg color
+                foreach (var square in _squareList) square.FillColor = _keyBackgroundColor;
+                //if a key is being held, change the key bg and increment hold variable of key
+                foreach (var key in _keyList)
+                    if (Keyboard.IsKeyPressed(key.ActivatorKey))
+                    {
+                        key.Hold++;
+                        _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
+                    }
+                    else
+                    {
+                        key.Hold = 0;
+                    }
+
+                MoveBars(_keyList, _squareList);
+
+                //draw bg from image if not null
+
+                if (_background is not null)
+                    _window.Draw(_background);
+                foreach (var staticDrawable in _staticDrawables) _window.Draw(staticDrawable);
+
+                foreach (var key in _keyList)
+                {
+                    if (_counter)
+                    {
+                        var text = CreateItems.CreateText(Convert.ToString(key.Counter),
+                            _squareList.ElementAt(_keyList.IndexOf(key)),
+                            _fontColor, true);
+                        _window.Draw(text);
+                    }
+
+                    foreach (var bar in key.BarList)
+                        _window.Draw(bar);
                 }
 
-                MoveRectangles(rectListLeft, rectListRight, _leftHold, _rightHold, squareLeft, squareRight);
-
-                _window.Draw(squareLeft);
-                _window.Draw(squareRight);
-                _window.Draw(textLeft);
-                _window.Draw(textRight);
-
-                foreach (var rectangleShape in rectListLeft) {
-                    _window.Draw(rectangleShape);
-                }
-                foreach (var rectangleShape in rectListRight) {
-                    _window.Draw(rectangleShape);
-                }
-                
-                _window.Draw(image);
+                _window.Draw(fadingSprite);
 
                 _window.Display();
             }
-
         }
+        /// <summary>
+        /// if a key is a new input create a new bar, if it is being held stretch it and move all bars up
+        /// </summary>
+        private void MoveBars(List<Key> keyList, List<RectangleShape> squareList)
+        {
+            foreach (var key in keyList)
+            {
+                if (key.Hold == 1)
+                {
+                    var rect = CreateItems.CreateBar(squareList.ElementAt(keyList.IndexOf(key)), _outlineThickness,
+                        _barSpeed);
+                    key.BarList.Add(rect);
+                    key.Counter++;
+                }
+                else if (key.Hold > 1)
+                {
+                    var rect = key.BarList.Last();
+                    rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + _barSpeed);
+                }
 
-        private void MoveRectangles(List<RectangleShape> rectListLeft, List<RectangleShape> rectListRight, int leftHold, int rightHold, 
-            RectangleShape squareLeft, RectangleShape squareRight) {
-
-            if (leftHold == 1) {
-                var rect = CreateItems.CreateRect(squareLeft, _outlineThickness, _barSpeed);
-                rectListLeft.Add(rect);
-            }
-            else if (leftHold > 1) {
-                var rect = rectListLeft.Last();
-                rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + _barSpeed);
-            }
-
-            if (rightHold == 1) {
-                var rect = CreateItems.CreateRect(squareRight, _outlineThickness, _barSpeed);
-                rectListRight.Add(rect);
-            }
-            else if (rightHold > 1) {
-                var rect = rectListRight.Last();
-                rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + _barSpeed);
-
-            }
-
-            foreach (var rect in rectListLeft) {
-                rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - _barSpeed);
-            }
-            foreach (var rect in rectListRight) {
-                rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - _barSpeed);
-            }
-
-            if (rectListLeft.Count > 0 && rectListLeft.First().Position.Y + rectListLeft.First().Size.Y < 0) {
-                rectListLeft.RemoveAt(0);
-
-            }
-            if (rectListRight.Count > 0 && rectListRight.First().Position.Y + rectListRight.First().Size.Y < 0) {
-                rectListRight.RemoveAt(0);
+                foreach (var rect in key.BarList)
+                    rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - _barSpeed);
+                if (key.BarList.Count > 0 && key.BarList.First().Position.Y + key.BarList.First().Size.Y < 0)
+                    key.BarList.RemoveAt(0);
             }
         }
-
-        
     }
 }
