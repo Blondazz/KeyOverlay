@@ -7,4 +7,4 @@ windowWidth=480
 barSpeed=400
 margin=65
 outlineThickness=6
-maxFPS=600
+maxFPS=60

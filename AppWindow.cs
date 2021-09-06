@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-//performance of this might be poor, unityengine's time library might be better
-using System.Diagnostics;
-
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -24,8 +21,7 @@ namespace KeyOverlay {
         private readonly int _margin = 0;
         private readonly int _outlineThickness = 0;
         private readonly uint _maxFPS = 0;
-        private Stopwatch stopWatch = new Stopwatch();
-
+        private Clock clock = new Clock();
         private int _leftHold;
         private int _rightHold;
         public AppWindow() {
@@ -123,7 +119,7 @@ namespace KeyOverlay {
 
             
             while (_window.IsOpen) {
-                stopWatch.Start();
+                //stopWatch.Start();
                 _window.Clear();
                 _window.DispatchEvents();
                 squareLeft.FillColor = Color.Transparent;
@@ -169,12 +165,12 @@ namespace KeyOverlay {
 
         private void MoveRectangles(List<RectangleShape> rectListLeft, List<RectangleShape> rectListRight, int leftHold, int rightHold, 
             RectangleShape squareLeft, RectangleShape squareRight) {
-            stopWatch.Stop();
-            float dt = Convert.ToSingle(stopWatch.Elapsed.TotalMilliseconds / 1000);
-            float moveDist = dt * _barSpeed;
-            
-            stopWatch.Reset();
 
+            //float dt = clock.Restart().AsSeconds();
+            float moveDist = clock.Restart().AsSeconds() * _barSpeed;
+            
+
+            //branchless might make this more efficient
             if (leftHold == 1) {
                 var rect = CreateItems.CreateRect(squareLeft, _outlineThickness, moveDist);
                 rectListLeft.Add(rect);
@@ -203,12 +199,10 @@ namespace KeyOverlay {
 
             if (rectListLeft.Count > 0 && rectListLeft.First().Position.Y + rectListLeft.First().Size.Y < 0) {
                 rectListLeft.RemoveAt(0);
-
             }
             if (rectListRight.Count > 0 && rectListRight.First().Position.Y + rectListRight.First().Size.Y < 0) {
                 rectListRight.RemoveAt(0);
             }
-            stopWatch.Start();
         }
 
         
