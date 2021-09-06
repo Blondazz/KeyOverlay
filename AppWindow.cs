@@ -22,8 +22,8 @@ namespace KeyOverlay {
         private readonly int _outlineThickness = 0;
         private readonly uint _maxFPS = 0;
         private Clock clock = new Clock();
-        private int _leftHold;
-        private int _rightHold;
+        private int _leftHold = 0;
+        private int _rightHold = 0;
         public AppWindow() {
             var config = ReadConfig();
             var windowWidth = config["windowWidth"];
