@@ -15,16 +15,19 @@ namespace KeyOverlay
         public int Counter = 0;
         public readonly bool isKey = true;
 
-        public Key(string key)
+        public Key(string keyString)
         {
-            KeyLetter = key;
-            if (!Enum.TryParse(key, out KeyboardKey))
+            string[] key = keyString.Split(new[] { "|" }, StringSplitOptions.None);
+            KeyLetter = key[0];
+            Counter = int.Parse(key[1]);
+
+            if (!Enum.TryParse(key[0], out KeyboardKey))
             {
                 if (KeyLetter[0] == 'm')
                 {
                     KeyLetter = KeyLetter.Remove(0, 1);
                 }
-                if (Enum.TryParse(key.Substring(1), out MouseButton))
+                if (Enum.TryParse(key[0].Substring(1), out MouseButton))
                 //if(!Enum.TryParse(key, out MouseButton))
                 {
                     //KeyLetter = key.Substring(1);
@@ -32,7 +35,7 @@ namespace KeyOverlay
                 }
                 else
                 {
-                    string exceptName = "Invalid key " + key;
+                    string exceptName = "Invalid key " + key[0];
                     throw new InvalidOperationException(exceptName);
                 }
 
