@@ -28,12 +28,13 @@ namespace KeyOverlay
         private readonly List<Drawable> _staticDrawables = new();
         private readonly uint _maxFPS;
         private Clock _clock = new();
-
+        private Dictionary<string, string> config = new Dictionary<string, string>();
 
         public AppWindow()
         {
-            var config = ReadConfig();
-            var windowWidth = config["windowWidth"];
+            // var config = ReadConfig();
+            ReadConfig();
+            var windowWidth = config["windowWidth"]; 
             var windowHeight = config["windowHeight"];
             _window = new RenderWindow(new VideoMode(uint.Parse(windowWidth!), uint.Parse(windowHeight!)),
                 "KeyOverlay", Styles.Default);
@@ -97,16 +98,22 @@ namespace KeyOverlay
                 _counter = true;
         }
 
-        private Dictionary<string, string> ReadConfig()
+        private void ReadConfig()
         {
-            var objectDict = new Dictionary<string, string>();
             var file = File.ReadLines("config.txt").ToArray();
-            foreach (var s in file) objectDict.Add(s.Split("=")[0], s.Split("=")[1]);
-            return objectDict;
+            foreach (var s in file) config[s.Split("=")[0]] = s.Split("=")[1];
         }
 
         private void OnClose(object sender, EventArgs e)
         {
+            List<string> configArray = new List<string>();
+
+            foreach(var x in config) {
+                configArray.Add(x.Key+"="+x.Value);
+            }
+
+            File.WriteAllLines("config.txt", configArray);
+
             _window.Close();
         }
 
@@ -188,6 +195,9 @@ namespace KeyOverlay
                         moveDist);
                     key.BarList.Add(rect);
                     key.Counter++;
+
+                    var configKey = config.Where(x => x.Value.Contains(key.KeyLetter+"|")).FirstOrDefault().Key;
+                    config[configKey] = key.KeyLetter+"|"+key.Counter;
                 }
                 else if (key.Hold > 1)
                 {
