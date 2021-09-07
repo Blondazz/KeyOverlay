@@ -196,8 +196,10 @@ namespace KeyOverlay
                     key.BarList.Add(rect);
                     key.Counter++;
 
-                    var configKey = config.Where(x => x.Value.Contains(key.KeyLetter+"|")).FirstOrDefault().Key;
-                    config[configKey] = key.KeyLetter+"|"+key.Counter;
+                    if(config["saveCounter"] == "yes") {
+                        var configKey = config.Where(x => x.Value.Contains(key.KeyLetter+"|")).FirstOrDefault().Key;
+                        config[configKey] = key.KeyLetter+"|"+key.Counter;
+                    }
                 }
                 else if (key.Hold > 1)
                 {
