@@ -6,17 +6,32 @@ To change the keys used please use config.txt
 
 
 ## config.txt properties
-key1, key2 - Left and right key the program should use (UPPERCASE), for numbers and symbols please refer to [this](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142) table.
+keyAmount - The amount of keys in the program (see the readme.txt for recommended widths for certain keyAmounts).
+
+key1, key2 ... - Keys the program should use (UPPERCASE), for numbers and symbols please refer to [this](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142) table. If you want more keys just add more fields.
 
 displayKey1, displayKey2 - If the name of the key you are using is too large, or you would like to use a different symbol, you can use this property to override the original key name that is going to be displayed.
 
-windowHeight, windowWidth - used to change the resolution of the program.
+keyCounter - yes/no - Adds a keycounter beneath each key that counts total clicks in a session.
 
-barSpeed - Adjust the speed at which the bars are travelling upwards.
+windowHeight, windowWidth - Used to change the resolution of the program.
 
-margin - Adjust the margin of the keys from the sides (in pixels in default resolution, divided by window width ratio if changed)
+keySize - Changes the size of the key (excluding border).
 
-outlineThickness - change the thickness of a square border
+barSpeed - Adjusts the speed at which the bars are travelling upwards.
+
+margin - Adjusts the margin of the keys from the sides.
+
+outlineThickness - Changes the thickness of a square border
+
+fading - yes/no - Adds/removes the fading effect on top 
+
+backgroundColor, keyColor, borderColor, barColor, fontColor - Changes the color of background, key when not pressed, key border, bars and clicked key color, the font color.
+
+backgroundImage - Let's you set a background. Put the image into Resources directory and then put the filename into this property ex. "bg.png". Makes sure the background is the same resolution as your window and if you want transparency on your background you have to put the transparency on the image itself.
+
+maxFPS - Sets the target FPS for the program to run
+
 # GIF Preview
 
 ![](https://puu.sh/I6Kg1/4ff86be176.gif)
