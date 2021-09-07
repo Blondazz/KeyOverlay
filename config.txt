@@ -1,6 +1,6 @@
 ﻿keyAmount=2
-key1=Z
-key2=X
+key1=mLeft
+key2=mRight
 key3=
 key4=
 key5=
