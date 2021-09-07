@@ -12,20 +12,22 @@ namespace KeyOverlay
     public class AppWindow
     {
         private readonly RenderWindow _window;
-        private readonly List<Key> _keyList = new();
-        private readonly List<RectangleShape> _squareList;
-        private readonly float _barSpeed;
-        private readonly float _ratioX;
-        private readonly float _ratioY;
-        private readonly int _outlineThickness;
-        private readonly Color _backgroundColor;
-        private readonly Color _keyBackgroundColor;
-        private readonly Color _barColor;
-        private readonly Color _fontColor;
-        private readonly Sprite _background;
-        private readonly bool _fading;
-        private readonly bool _counter;
-        private readonly List<Drawable> _staticDrawables = new();
+        private readonly List<Key> _keyList = new List<Key>();
+        private readonly List<RectangleShape> _squareList = new List<RectangleShape>();
+        private readonly float _barSpeed = 0;
+        private readonly float _ratioX = 0;
+        private readonly float _ratioY = 0;
+        private readonly int _outlineThickness = 0;
+        private readonly Color _backgroundColor = new Color(0, 0, 0, 255);
+        private readonly Color _keyBackgroundColor = new Color(0, 0, 0, 0);
+        private readonly Color _barColor = new Color(255, 255, 255, 150);
+        private readonly Color _fontColor = new Color(255, 255, 255, 255);
+        private readonly Sprite _background = null;
+        private readonly bool _fading = true;
+        private readonly bool _counter = false;
+        private readonly List<Drawable> _staticDrawables = new List<Drawable>();
+        private readonly uint _maxFPS = 60;
+        private Clock _clock = new Clock();
 
 
         public AppWindow()
@@ -45,6 +47,7 @@ namespace KeyOverlay
             _backgroundColor = CreateItems.CreateColor(config["backgroundColor"]);
             _keyBackgroundColor = CreateItems.CreateColor(config["keyColor"]);
             _barColor = CreateItems.CreateColor(config["barColor"]);
+            _maxFPS = uint.Parse(config["maxFPS"]);
 
             //get background image if in config
             if (config["backgroundImage"] != "")
@@ -59,11 +62,22 @@ namespace KeyOverlay
             var keyAmount = int.Parse(config["keyAmount"]);
             for (var i = 1; i <= keyAmount; i++)
             {
-                var key = new Key(config[$"key" + i]);
-                if (config.ContainsKey($"displayKey" + i))
-                    if (config[$"displayKey" + i] != "")
-                        key.KeyLetter = config[$"displayKey" + i];
-                _keyList.Add(key);
+                try
+                {
+                    var key = new Key(config[$"key" + i]);
+                    if (config.ContainsKey($"displayKey" + i))
+                        if (config[$"displayKey" + i] != "")
+                            key.KeyLetter = config[$"displayKey" + i];
+                    _keyList.Add(key);
+                }
+                catch (InvalidOperationException e)
+                {
+                    //invalid key
+                    Console.WriteLine(e.Message);
+                    using var sw = new StreamWriter("keyErrorMessage.txt");
+                    sw.WriteLine(e.Message);
+                }
+
             }
 
             //create squares and add them to _staticDrawables list
@@ -107,7 +121,7 @@ namespace KeyOverlay
         public void Run()
         {
             _window.Closed += OnClose;
-            _window.SetFramerateLimit(144);
+            _window.SetFramerateLimit(_maxFPS);
 
             //Creating a sprite for the fading effect
             var fadingList = Fading.GetBackgroundColorFadingTexture(_backgroundColor, _window.Size.X, _ratioY);
@@ -128,7 +142,7 @@ namespace KeyOverlay
                 foreach (var square in _squareList) square.FillColor = _keyBackgroundColor;
                 //if a key is being held, change the key bg and increment hold variable of key
                 foreach (var key in _keyList)
-                    if (Keyboard.IsKeyPressed(key.ActivatorKey))
+                    if ((key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey)) || (!key.isKey && Mouse.IsButtonPressed(key.MouseButton)))
                     {
                         key.Hold++;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
@@ -170,23 +184,25 @@ namespace KeyOverlay
         /// </summary>
         private void MoveBars(List<Key> keyList, List<RectangleShape> squareList)
         {
+            float moveDist = _clock.Restart().AsSeconds() * _barSpeed;
+
             foreach (var key in keyList)
             {
                 if (key.Hold == 1)
                 {
                     var rect = CreateItems.CreateBar(squareList.ElementAt(keyList.IndexOf(key)), _outlineThickness,
-                        _barSpeed);
+                        moveDist);
                     key.BarList.Add(rect);
                     key.Counter++;
                 }
                 else if (key.Hold > 1)
                 {
                     var rect = key.BarList.Last();
-                    rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + _barSpeed);
+                    rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + moveDist);
                 }
 
                 foreach (var rect in key.BarList)
-                    rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - _barSpeed);
+                    rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - moveDist);
                 if (key.BarList.Count > 0 && key.BarList.First().Position.Y + key.BarList.First().Size.Y < 0)
                     key.BarList.RemoveAt(0);
             }
