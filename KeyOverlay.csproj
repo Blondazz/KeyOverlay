@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <None Update="config.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\consolab.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

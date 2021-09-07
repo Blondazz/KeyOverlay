@@ -14,10 +14,10 @@ namespace KeyOverlay
         private readonly RenderWindow _window;
         private readonly List<Key> _keyList = new();
         private readonly List<RectangleShape> _squareList;
-        private readonly float _barSpeed = 0;
-        private readonly float _ratioX = 0;
-        private readonly float _ratioY = 0;
-        private readonly int _outlineThickness = 0;
+        private readonly float _barSpeed;
+        private readonly float _ratioX;
+        private readonly float _ratioY;
+        private readonly int _outlineThickness;
         private readonly Color _backgroundColor;
         private readonly Color _keyBackgroundColor;
         private readonly Color _barColor;
@@ -25,8 +25,8 @@ namespace KeyOverlay
         private readonly Sprite _background;
         private readonly bool _fading;
         private readonly bool _counter;
-        private readonly List<Drawable> _staticDrawables = new List<Drawable>();
-        private readonly uint _maxFPS = 60;
+        private readonly List<Drawable> _staticDrawables = new();
+        private readonly uint _maxFPS;
         private Clock _clock = new();
 
 
@@ -51,17 +51,13 @@ namespace KeyOverlay
 
             //get background image if in config
             if (config["backgroundImage"] != "")
-            {
                 _background = new Sprite(new Texture(
                     Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources",
                         config["backgroundImage"]))));
-                
-            }
 
             //create keys which will be used to create the squares and text
             var keyAmount = int.Parse(config["keyAmount"]);
             for (var i = 1; i <= keyAmount; i++)
-            {
                 try
                 {
                     var key = new Key(config[$"key" + i]);
@@ -77,8 +73,6 @@ namespace KeyOverlay
                     using var sw = new StreamWriter("keyErrorMessage.txt");
                     sw.WriteLine(e.Message);
                 }
-
-            }
 
             //create squares and add them to _staticDrawables list
             var outlineColor = CreateItems.CreateColor(config["borderColor"]);
@@ -140,7 +134,8 @@ namespace KeyOverlay
                 foreach (var square in _squareList) square.FillColor = _keyBackgroundColor;
                 //if a key is being held, change the key bg and increment hold variable of key
                 foreach (var key in _keyList)
-                    if ((key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey)) || (!key.isKey && Mouse.IsButtonPressed(key.MouseButton)))
+                    if (key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey) ||
+                        !key.isKey && Mouse.IsButtonPressed(key.MouseButton))
                     {
                         key.Hold++;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
@@ -177,12 +172,13 @@ namespace KeyOverlay
                 _window.Display();
             }
         }
+
         /// <summary>
         /// if a key is a new input create a new bar, if it is being held stretch it and move all bars up
         /// </summary>
         private void MoveBars(List<Key> keyList, List<RectangleShape> squareList)
         {
-            float moveDist = _clock.Restart().AsSeconds() * _barSpeed;
+            var moveDist = _clock.Restart().AsSeconds() * _barSpeed;
 
             foreach (var key in keyList)
             {
