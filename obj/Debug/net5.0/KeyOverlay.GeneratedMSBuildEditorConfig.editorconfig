@@ -6,3 +6,5 @@ build_property.ProjectTypeGuids =
 build_property.PublishSingleFile = 
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
+build_property.RootNamespace = KeyOverlay
+build_property.ProjectDir = C:\Users\Nino Hana\Documents\GitHub\KeyOverlay2\
