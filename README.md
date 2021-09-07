@@ -2,13 +2,13 @@
 # KeyOverlay
  A simple key overlay for osu! streaming
 To change the keys used please use config.txt
-# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v0.1.1)
+# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0)
 
 
 ## config.txt properties
 keyAmount - The amount of keys in the program (see the readme.txt for recommended widths for certain keyAmounts).
 
-key1, key2 ... - Keys the program should use (UPPERCASE), for numbers and symbols [please refer to this table](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142). If you want more keys just add more fields.
+key1, key2 ... - Keys the program should use (UPPERCASE), for numbers and symbols [please refer to this table](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142), for mouse buttons use mLeft mRight. If you want more keys just add more fields.
 
 displayKey1, displayKey2 - If the name of the key you are using is too large, or you would like to use a different symbol, you can use this property to override the original key name that is going to be displayed.
 
