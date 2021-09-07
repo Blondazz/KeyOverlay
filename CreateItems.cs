@@ -21,12 +21,11 @@ namespace KeyOverlay
         }
 
         public static List<RectangleShape> CreateKeys(int keyAmount, int outlineThickness, float size, float ratioX, float ratioY,
-            int margin, int marginBottom, RenderWindow window, Color backgroundColor, Color outlineColor)
+            int margin, RenderWindow window, Color backgroundColor, Color outlineColor)
         {
             var yPos = 900 * ratioY;
             var width = size + outlineThickness * 2;
             var keyList = new List<RectangleShape>();
-            var keySpace = (window.Size.X - (margin + width) * 2)/ (keyAmount - 1);
             var spacing = (window.Size.X - margin * 2 - width * keyAmount) / (keyAmount - 1);
             for (int i = 0; i < keyAmount; i++)
             {

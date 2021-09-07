@@ -14,7 +14,6 @@ windowWidth=240
 keySize=70
 barSpeed=400
 margin=25
-marginBottom=5
 outlineThickness=5
 fading=yes
 backgroundColor=0,0,0,255

@@ -12,22 +12,22 @@ namespace KeyOverlay
     public class AppWindow
     {
         private readonly RenderWindow _window;
-        private readonly List<Key> _keyList = new List<Key>();
-        private readonly List<RectangleShape> _squareList = new List<RectangleShape>();
+        private readonly List<Key> _keyList = new();
+        private readonly List<RectangleShape> _squareList;
         private readonly float _barSpeed = 0;
         private readonly float _ratioX = 0;
         private readonly float _ratioY = 0;
         private readonly int _outlineThickness = 0;
-        private readonly Color _backgroundColor = new Color(0, 0, 0, 255);
-        private readonly Color _keyBackgroundColor = new Color(0, 0, 0, 0);
-        private readonly Color _barColor = new Color(255, 255, 255, 150);
-        private readonly Color _fontColor = new Color(255, 255, 255, 255);
-        private readonly Sprite _background = null;
-        private readonly bool _fading = true;
-        private readonly bool _counter = false;
+        private readonly Color _backgroundColor;
+        private readonly Color _keyBackgroundColor;
+        private readonly Color _barColor;
+        private readonly Color _fontColor;
+        private readonly Sprite _background;
+        private readonly bool _fading;
+        private readonly bool _counter;
         private readonly List<Drawable> _staticDrawables = new List<Drawable>();
         private readonly uint _maxFPS = 60;
-        private Clock _clock = new Clock();
+        private Clock _clock = new();
 
 
         public AppWindow()
@@ -82,11 +82,9 @@ namespace KeyOverlay
 
             //create squares and add them to _staticDrawables list
             var outlineColor = CreateItems.CreateColor(config["borderColor"]);
-            var marginBottom = int.Parse(config["marginBottom"]);
             var keySize = int.Parse(config["keySize"]);
             var margin = int.Parse(config["margin"]);
             _squareList = CreateItems.CreateKeys(keyAmount, _outlineThickness, keySize, _ratioX, _ratioY, margin,
-                marginBottom,
                 _window, _keyBackgroundColor, outlineColor);
             foreach (var square in _squareList) _staticDrawables.Add(square);
 
