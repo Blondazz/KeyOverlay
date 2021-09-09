@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using SFML.Graphics;
 using SFML.System;
 
@@ -10,8 +11,9 @@ namespace KeyOverlay {
             var sprites = new List<Sprite>();
             var alpha = 255;
             var color = backgroundColor;
-            for (int i = 0; i < 255; i++) {
-                var img = new Image(windowWidth, (uint)(2*ratioY), color);
+            for (int i = 0; i < 255; i++)
+            {
+                Image img = ratioY>=.5f ? new Image(windowWidth, (uint)(2 * ratioY), color) : new Image(windowWidth, 1, color);
                 var sprite = new Sprite(new Texture(img));
                 sprite.Position = new Vector2f(0, img.Size.Y * i);
                 sprites.Add(sprite);
