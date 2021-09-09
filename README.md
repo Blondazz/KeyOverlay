@@ -2,13 +2,13 @@
 # KeyOverlay
  A simple key overlay for osu! streaming
 To change the keys used please use config.txt
-# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v0.1.1)
+# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0)
 
 
 ## config.txt properties
 keyAmount - The amount of keys in the program (see the readme.txt for recommended widths for certain keyAmounts).
 
-key1, key2 ... - Keys the program should use (UPPERCASE), for numbers and symbols [please refer to this table](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142). If you want more keys just add more fields.
+key1, key2 ... - Keys the program should use (UPPERCASE), for numbers and symbols [please refer to this table](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php#acb4cacd7cc5802dec45724cf3314a142), for mouse buttons add m before the [mouse button options](https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Mouse.php#a4fb128be433f9aafe66bc0c605daaa90) ex. mLeft mRight. If you want more keys just add more fields.
 
 displayKey1, displayKey2 - If the name of the key you are using is too large, or you would like to use a different symbol, you can use this property to override the original key name that is going to be displayed.
 
@@ -26,9 +26,9 @@ outlineThickness - Changes the thickness of a square border
 
 fading - yes/no - Adds/removes the fading effect on top 
 
-backgroundColor, keyColor, borderColor, barColor, fontColor - Changes the color of background, key when not pressed, key border, bars and clicked key color, the font color.
+backgroundColor, keyColor, borderColor, barColor, fontColor - Changes the color of background (might be tricky, but possible to chroma key out in obs), key when not pressed, key border, bars and clicked key color, the font color using RGBA values.
 
-backgroundImage - Let's you set a background. Put the image into Resources directory and then put the filename into this property ex. "bg.png". Makes sure the background is the same resolution as your window and if you want transparency on your background you have to put the transparency on the image itself.
+backgroundImage - Lets you set a background. Put the image into Resources directory and then put the filename into this property ex. "bg.png". Makes sure the background is the same resolution as your window and if you want transparency on your background you have to put the transparency on the image itself.
 
 maxFPS - Sets the target FPS for the program to run
 

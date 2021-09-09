@@ -1,11 +1,11 @@
 ﻿keyAmount=2
 key1=Z
 key2=X
-key3=
-key4=
-key5=
-key6=
-key7=
+key3=C
+key4=V
+key5=B
+key6=N
+key7=M
 displayKey1=
 displayKey2=
 keyCounter=no
