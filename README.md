@@ -3,6 +3,7 @@
  A simple key overlay for osu! streaming
 To change the keys used please use config.txt
 # [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0)
+IF YOU ARE HAVING PROBLEMS WITH THE PROGRAM WHEN OSU! IS ON FULLSCREEN, TRY USING GAME CAPTURE INSTEAD OF WINDOW CAPTURE IN OBS!
 
 
 ## config.txt properties
