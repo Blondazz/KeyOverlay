@@ -1,5 +1,5 @@
 name: KeyOverlay Build
-on: [ push, workflow_dispatch ]
+on: [ push, pull_reqeust, workflow_dispatch ]
 
 jobs:
   build:
