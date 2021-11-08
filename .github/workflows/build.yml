@@ -1,5 +1,26 @@
 name: KeyOverlay Build
-on: [ push, pull_reqeust, workflow_dispatch ]
+on: 
+    push:
+      branches:
+        - "main"
+      paths-ignore:
+        - ".github/**"
+        - "!.github/workflows/build.yml"
+        - ".gitignore"
+        - ".gitattributes"
+        - "LICENSE"
+        - "README.md"
+    pull_reqeust:
+      branches:
+        - "main"
+      paths-ignore:
+        - ".github/**"
+        - "!.github/workflows/build.yml"
+        - ".gitignore"
+        - ".gitattributes"
+        - "LICENSE"
+        - "README.md"
+    workflow_dispatch:
 
 jobs:
   build:
