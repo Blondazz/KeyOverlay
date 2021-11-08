@@ -10,7 +10,7 @@ on:
         - ".gitattributes"
         - "LICENSE"
         - "README.md"
-    pull_reqeust:
+    pull_request:
       branches:
         - "main"
       paths-ignore:
