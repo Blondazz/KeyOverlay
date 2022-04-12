@@ -4,7 +4,7 @@
  
  If you're interested in per key coloring and custom width for your keys please check out [Friedchiken-42's version](https://github.com/Friedchicken-42/KeyOverlay) better suited for mania.
 To change the keys used please use config.txt
-# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0)
+# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0.1)
 IF YOU ARE HAVING PROBLEMS WITH THE PROGRAM WHEN OSU! IS ON FULLSCREEN, TRY USING GAME CAPTURE INSTEAD OF WINDOW CAPTURE IN OBS!
 
 
