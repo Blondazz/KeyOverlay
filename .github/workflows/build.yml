@@ -36,7 +36,7 @@ jobs:
         with:
           dotnet-version: 6.x
       - name: Build
-        run: dotnet build --configuration Release -o build/
+        run: dotnet build --configuration Debug -o build/
       - name: Upload to artifact
         uses: actions/upload-artifact@v2
         with:
