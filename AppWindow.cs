@@ -142,12 +142,14 @@ namespace KeyOverlay
                         !key.isKey && Mouse.IsButtonPressed(key.MouseButton))
                     {
                         key.Hold++;
-                        _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _pressFontColor;
+                        if(_keyText.ElementAt(_keyList.IndexOf(key)).FillColor != _pressFontColor)
+                            _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _pressFontColor;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                     }
                     else
                     {
-                        _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _fontColor;
+                        if (_keyText.ElementAt(_keyList.IndexOf(key)).FillColor != _fontColor)
+                            _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _fontColor;
                         key.Hold = 0;
                     }
 
