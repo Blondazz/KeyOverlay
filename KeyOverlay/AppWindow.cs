@@ -127,7 +127,6 @@ namespace KeyOverlay
             fadingTexture.Display();
             var fadingSprite = new Sprite(fadingTexture.Texture);
 
-            var framesSincePress = 0;
             while (_window.IsOpen)
             {
                 _window.Clear(_backgroundColor);
@@ -145,7 +144,7 @@ namespace KeyOverlay
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                         _lastClicked = key.KeyboardKey;
                        if (_lastClicked == _lastReleased)
-                            Console.WriteLine(DateTime.Now.Ticks);
+                            Console.WriteLine(DateTime.Now.Ticks); //Todo: play a sound or something lmao
                     }
                     else
                     {
@@ -155,13 +154,6 @@ namespace KeyOverlay
                 //take only the first instance of a key click into consideration (no multiple inputs from holding)!!!!!!
                 _lastReleased = keysClicked == 0 ? _lastClicked : Keyboard.Key.Unknown;
 
-                if (!Keyboard.IsKeyPressed(_lastClicked))
-                {
-                    _lastReleased = _lastClicked;
-                    framesSincePress = 0;
-                }
-
-                framesSincePress++;
                 MoveBars(_keyList, _squareList);
 
                 //draw bg from image if not null
