@@ -3,8 +3,9 @@
  A simple key overlay for osu! streaming
  
  If you're interested in per key coloring and custom width for your keys please check out [Friedchiken-42's version](https://github.com/Friedchicken-42/KeyOverlay) better suited for mania.
+ 
 To change the keys used please use config.txt
-# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0)
+# [Download Link](https://github.com/Blondazz/KeyOverlay/releases/tag/v1.0.2)
 IF YOU ARE HAVING PROBLEMS WITH THE PROGRAM WHEN OSU! IS ON FULLSCREEN, TRY USING GAME CAPTURE INSTEAD OF WINDOW CAPTURE IN OBS!
 
 
@@ -41,3 +42,15 @@ maxFPS - Sets the target FPS for the program to run
 
 based on a similar app by an unknown author (if you are the author dm me so I can credit you)
 
+# Linux
+
+## Setup
+
+1. Unzip `KeyOverlay-ubuntu-latest.zip` into a folder.
+2. cd into the folder unzipped folder
+3. make `KeyOverlay` executable using `chmod`
+4. run `KeyOverlay` in terminal (`KeyOverlay`)
+
+## Note
+
+If you get an error similar to `System.DllNotFoundException: Unable to load shared library 'csfml-system'`, install the packages that you are missing using your distribution's package manager. Any issues created related to this issue will be automatically closed.
