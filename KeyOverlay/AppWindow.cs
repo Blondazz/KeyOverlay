@@ -28,6 +28,8 @@ namespace KeyOverlay
         private readonly List<Drawable> _staticDrawables = new();
         private readonly uint _maxFPS;
         private Clock _clock = new();
+        private Keyboard.Key _lastClicked;
+        private Keyboard.Key _lastReleased;
 
 
         public AppWindow()
@@ -125,7 +127,7 @@ namespace KeyOverlay
             fadingTexture.Display();
             var fadingSprite = new Sprite(fadingTexture.Texture);
 
-
+            var framesSincePress = 0;
             while (_window.IsOpen)
             {
                 _window.Clear(_backgroundColor);
@@ -133,18 +135,33 @@ namespace KeyOverlay
                 //if no keys are being held fill the square with bg color
                 foreach (var square in _squareList) square.FillColor = _keyBackgroundColor;
                 //if a key is being held, change the key bg and increment hold variable of key
+                int keysClicked = 0;
                 foreach (var key in _keyList)
                     if (key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey) ||
                         !key.isKey && Mouse.IsButtonPressed(key.MouseButton))
                     {
+                        keysClicked++;
                         key.Hold++;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
+                        _lastClicked = key.KeyboardKey;
+                       if (_lastClicked == _lastReleased)
+                            Console.WriteLine(DateTime.Now.Ticks);
                     }
                     else
                     {
                         key.Hold = 0;
                     }
+                
+                //take only the first instance of a key click into consideration (no multiple inputs from holding)!!!!!!
+                _lastReleased = keysClicked == 0 ? _lastClicked : Keyboard.Key.Unknown;
 
+                if (!Keyboard.IsKeyPressed(_lastClicked))
+                {
+                    _lastReleased = _lastClicked;
+                    framesSincePress = 0;
+                }
+
+                framesSincePress++;
                 MoveBars(_keyList, _squareList);
 
                 //draw bg from image if not null

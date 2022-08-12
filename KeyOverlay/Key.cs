@@ -25,9 +25,7 @@ namespace KeyOverlay
                     KeyLetter = KeyLetter.Remove(0, 1);
                 }
                 if (Enum.TryParse(key.Substring(1), out MouseButton))
-                //if(!Enum.TryParse(key, out MouseButton))
                 {
-                    //KeyLetter = key.Substring(1);
                     isKey = false;
                 }
                 else
