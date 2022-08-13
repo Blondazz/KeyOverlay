@@ -30,7 +30,7 @@ outlineThickness - Changes the thickness of a square border
 
 fading - yes/no - Adds/removes the fading effect on top 
 
-backgroundColor, keyColor, borderColor, barColor, fontColor - Changes the color of background (might be tricky, but possible to chroma key out in obs), key when not pressed, key border, bars and clicked key color, the font color using RGBA values.
+backgroundColor, keyColor, PressFontColor, borderColor, barColor, fontColor - Changes the color of background (might be tricky, but possible to chroma key out in obs), key when not pressed, key when pressed, key border, bars and clicked key color, the font color using RGBA values.
 
 backgroundImage - Lets you set a background. Put the image into Resources directory and then put the filename into this property ex. "bg.png" (without the quote symbols). Makes sure the background is the same resolution as your window and if you want transparency on your background you have to put the transparency on the image itself.
 
