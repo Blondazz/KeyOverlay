@@ -22,10 +22,12 @@ namespace KeyOverlay
         private readonly Color _keyBackgroundColor;
         private readonly Color _barColor;
         private readonly Color _fontColor;
+        private readonly Color _pressFontColor;
         private readonly Sprite _background;
         private readonly bool _fading;
         private readonly bool _counter;
         private readonly List<Drawable> _staticDrawables = new();
+        private readonly List<Text> _keyText = new();
         private readonly uint _maxFPS;
         private Clock _clock = new();
 
@@ -84,10 +86,12 @@ namespace KeyOverlay
 
             //create text and add it ti _staticDrawables list
             _fontColor = CreateItems.CreateColor(config["fontColor"]);
+            _pressFontColor = CreateItems.CreateColor(config["pressFontColor"]);
             for (var i = 0; i < keyAmount; i++)
             {
                 var text = CreateItems.CreateText(_keyList.ElementAt(i).KeyLetter, _squareList.ElementAt(i),
                     _fontColor, false);
+                _keyText.Add(text);
                 _staticDrawables.Add(text);
             }
 
@@ -138,10 +142,14 @@ namespace KeyOverlay
                         !key.isKey && Mouse.IsButtonPressed(key.MouseButton))
                     {
                         key.Hold++;
+                        if(_keyText.ElementAt(_keyList.IndexOf(key)).FillColor != _pressFontColor)
+                            _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _pressFontColor;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                     }
                     else
                     {
+                        if (_keyText.ElementAt(_keyList.IndexOf(key)).FillColor != _fontColor)
+                            _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _fontColor;
                         key.Hold = 0;
                     }
 
