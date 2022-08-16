@@ -170,17 +170,16 @@ namespace KeyOverlay
                     }
                 
                 //take only the first instance of a key click into consideration (no multiple inputs from holding)!!!!!!
-
                 _lastReleased = keysClicked == 0 ? _lastClicked : Keyboard.Key.Unknown;
+
+                //forget the last clicked button after a set amount of time
                 if (lastKeyPressed > _soundReset)
                     _lastReleased = Keyboard.Key.Unknown;
                 lastKeyPressed++;
 
-
                 MoveBars(_keyList, _squareList);
 
                 //draw bg from image if not null
-
                 if (_background is not null)
                     _window.Draw(_background);
                 foreach (var staticDrawable in _staticDrawables) _window.Draw(staticDrawable);
