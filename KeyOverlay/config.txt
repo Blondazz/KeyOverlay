@@ -21,5 +21,6 @@ keyColor=0,0,0,0
 borderColor=255,255,255,255
 barColor=255,255,255,100
 fontColor= 255,255,255,255
+pressFontColor= 255,255,255,255
 backgroundImage=
 maxFPS=60
