@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Media;
+using SFML.Audio;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -30,7 +32,9 @@ namespace KeyOverlay
         private Clock _clock = new();
         private Keyboard.Key _lastClicked;
         private Keyboard.Key _lastReleased;
-
+        private readonly Sound _sound;
+        private readonly SoundBuffer _soundBuffer;
+        private readonly int _soundReset;
 
         public AppWindow()
         {
@@ -97,6 +101,12 @@ namespace KeyOverlay
                 _fading = true;
             if (config["keyCounter"] == "yes")
                 _counter = true;
+            if (!string.IsNullOrEmpty(config["sound"]))
+            {
+                _soundBuffer = new SoundBuffer($"Sound/{config["sound"]}");
+                _sound = new Sound(_soundBuffer);
+                _soundReset = int.Parse(config["soundReset"]);
+            }
         }
 
         private Dictionary<string, string> ReadConfig()
@@ -126,7 +136,8 @@ namespace KeyOverlay
                     fadingTexture.Draw(sprite);
             fadingTexture.Display();
             var fadingSprite = new Sprite(fadingTexture.Texture);
-
+            
+            int lastSoundPlayed = 0;
             while (_window.IsOpen)
             {
                 _window.Clear(_backgroundColor);
@@ -143,14 +154,18 @@ namespace KeyOverlay
                         key.Hold++;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                         _lastClicked = key.KeyboardKey;
-                       if (_lastClicked == _lastReleased)
-                            Console.WriteLine(DateTime.Now.Ticks); //Todo: play a sound or something lmao
+                        if (_lastClicked == _lastReleased && lastSoundPlayed > _soundReset)
+                        {
+                            _sound.Play();
+                            lastSoundPlayed = 0;
+                        }
                     }
                     else
                     {
                         key.Hold = 0;
                     }
                 
+                lastSoundPlayed++;
                 //take only the first instance of a key click into consideration (no multiple inputs from holding)!!!!!!
                 _lastReleased = keysClicked == 0 ? _lastClicked : Keyboard.Key.Unknown;
 

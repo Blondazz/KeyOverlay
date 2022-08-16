@@ -23,3 +23,5 @@ barColor=255,255,255,100
 fontColor= 255,255,255,255
 backgroundImage=
 maxFPS=60
+sound=sound.wav
+soundReset=300
