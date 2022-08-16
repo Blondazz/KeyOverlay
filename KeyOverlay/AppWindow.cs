@@ -32,8 +32,9 @@ namespace KeyOverlay
         private Clock _clock = new();
         private Keyboard.Key _lastClicked;
         private Keyboard.Key _lastReleased;
-        private readonly Sound _sound;
-        private readonly SoundBuffer _soundBuffer;
+        private Sound _sound;
+        private readonly SoundBuffer _soundBuffer1;
+        private readonly SoundBuffer _soundBuffer2;
         private readonly int _soundReset;
 
         public AppWindow()
@@ -101,10 +102,10 @@ namespace KeyOverlay
                 _fading = true;
             if (config["keyCounter"] == "yes")
                 _counter = true;
-            if (!string.IsNullOrEmpty(config["sound"]))
+            if (!string.IsNullOrEmpty(config["sound1"]) && !string.IsNullOrEmpty(config["sound2"]))
             {
-                _soundBuffer = new SoundBuffer($"Sound/{config["sound"]}");
-                _sound = new Sound(_soundBuffer);
+                _soundBuffer1 = new SoundBuffer($"Resources/Sound/{config["sound1"]}");
+                _soundBuffer2 = new SoundBuffer($"Resources/Sound/{config["sound2"]}");
                 _soundReset = int.Parse(config["soundReset"]);
             }
         }
@@ -137,7 +138,7 @@ namespace KeyOverlay
             fadingTexture.Display();
             var fadingSprite = new Sprite(fadingTexture.Texture);
             
-            int lastSoundPlayed = 0;
+            int lastKeyPressed = 0;
             while (_window.IsOpen)
             {
                 _window.Clear(_backgroundColor);
@@ -150,14 +151,17 @@ namespace KeyOverlay
                     if (key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey) ||
                         !key.isKey && Mouse.IsButtonPressed(key.MouseButton))
                     {
+                        lastKeyPressed = 0;
                         keysClicked++;
                         key.Hold++;
                         _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                         _lastClicked = key.KeyboardKey;
-                        if (_lastClicked == _lastReleased && lastSoundPlayed > _soundReset)
+                        if (_lastClicked == _lastReleased)
                         {
+                            _sound = _lastClicked == _keyList[0].KeyboardKey
+                                ? new Sound(_soundBuffer1)
+                                : new Sound(_soundBuffer2);
                             _sound.Play();
-                            lastSoundPlayed = 0;
                         }
                     }
                     else
@@ -165,9 +169,13 @@ namespace KeyOverlay
                         key.Hold = 0;
                     }
                 
-                lastSoundPlayed++;
                 //take only the first instance of a key click into consideration (no multiple inputs from holding)!!!!!!
+
                 _lastReleased = keysClicked == 0 ? _lastClicked : Keyboard.Key.Unknown;
+                if (lastKeyPressed > _soundReset)
+                    _lastReleased = Keyboard.Key.Unknown;
+                lastKeyPressed++;
+
 
                 MoveBars(_keyList, _squareList);
 
