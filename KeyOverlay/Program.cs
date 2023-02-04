@@ -16,7 +16,7 @@ namespace KeyOverlay
             {
                 Console.WriteLine(e);
                 using var sw = new StreamWriter("errorMessage.txt");
-                sw.WriteLine(e.Message);
+                sw.WriteLine(e);
                 throw;
             }
             window.Run();
