@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,61 +7,71 @@ using SFML.System;
 
 namespace KeyOverlay
 {
-    public static class CreateItems
+    
+    public class CreateItems
     {
+
+
         public static readonly Font _font = new Font(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources",
             "consolab.ttf")));
-        public static RectangleShape CreateBar(RectangleShape square, int outlineThickness, float barSpeed)
-        {
-            var rect = new RectangleShape(new Vector2f(square.Size.X + outlineThickness * 2, barSpeed));
-            rect.Position = new Vector2f(square.Position.X - outlineThickness,
-                square.Position.Y - square.Size.Y - square.OutlineThickness);
-            rect.FillColor = square.FillColor;
-            return rect;
-        }
-
-        public static List<RectangleShape> CreateKeys(int keyAmount, int outlineThickness, float size, float ratioX, float ratioY,
+        
+        public static List<CircleShape> CreateKeys(int keyAmount, int outlineThickness, float size, float ratioX, float ratioY,
             int margin, RenderWindow window, Color backgroundColor, Color outlineColor)
         {
-            var yPos = 900 * ratioY;
-            var width = size + outlineThickness * 2;
-            var keyList = new List<RectangleShape>();
-            var spacing = (window.Size.X - margin * 2 - width * keyAmount) / (keyAmount - 1);
-            for (int i = 0; i < keyAmount; i++)
-            {
-                var square = new RectangleShape(new Vector2f(size, size));
-                
-                square.FillColor = backgroundColor;
-                square.OutlineColor = outlineColor;
-                square.OutlineThickness = outlineThickness;
-                square.Origin = new Vector2f(0, size);
-                square.Position = new Vector2f(margin +outlineThickness + (width + spacing ) * i , yPos); 
-                keyList.Add(square);
-            }
-            return keyList;
+                var yPos = 870 * ratioY;
+                var keyList = new List<CircleShape>();
+                var spacing = (window.Size.X - margin * 2 - size * keyAmount) / (keyAmount - 1);
+
+                for (int i = 0; i < keyAmount; i++)
+                {
+                    var circle = new CircleShape(size / 2);
+
+                    circle.FillColor = backgroundColor;
+                    circle.OutlineColor = outlineColor;
+                    circle.OutlineThickness = outlineThickness;
+                    
+                    circle.Origin = new Vector2f(size / 2, size / 2);
+                    circle.Position = new Vector2f(margin + size / 2 + outlineThickness - 5 + (size + spacing) * i, yPos);
+                    keyList.Add(circle);
+                }
+
+                return keyList;
         }
 
-        public static Text CreateText(string key, RectangleShape square, Color color, bool counter)
+        public static Text CreateText(string textString, CircleShape shape, Color textColor, bool centerText = true)
         {
-            var text = new Text(key, _font);
-            text.CharacterSize = (uint)(50 * square.Size.X / 140);
-            text.Style = Text.Styles.Bold;
-            text.FillColor = color;
-            text.Origin = new Vector2f(text.GetLocalBounds().Width / 2f, 32 * square.Size.X / 140f);
-            if(counter)
-                text.Position = new Vector2f(square.GetGlobalBounds().Left + square.OutlineThickness + square.Size.X / 2f,
-                    square.GetGlobalBounds().Top + square.OutlineThickness + square.Size.Y +text.CharacterSize);
-            else
-                text.Position = new Vector2f(square.GetGlobalBounds().Left + square.OutlineThickness + square.Size.X / 2f,
-                    square.GetGlobalBounds().Top + square.OutlineThickness + square.Size.Y / 2f);
+            Text text = new Text(textString, new Font(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Resources",
+            "consolab.ttf"))));
 
-            return text;
+            text.FillColor = textColor;
+            text.Origin = new Vector2f(text.GetLocalBounds().Width / 1.8f, text.GetLocalBounds().Height );
+            text.Position = shape.Position;
+
+            return text;            
         }
         
         public static Color CreateColor(string s)
         {
             var bytes = s.Split(',').Select(int.Parse).Select(Convert.ToByte).ToArray();
+
             return new Color(bytes[0], bytes[1], bytes[2], bytes[3]);
         }
+
+        public static CircleShape CreateBar(CircleShape circle, int outlineThickness, float moveDist, Color barColor, int barSides, int rotation)
+        {
+            
+            uint Ubar = Convert.ToUInt32(barSides);
+
+            var bar = new CircleShape(circle.Radius, Ubar);
+
+            bar.Origin = new Vector2f(bar.Radius, bar.Radius);
+            bar.FillColor = barColor;
+            bar.Rotation = rotation;
+            bar.Position = new Vector2f(circle.Position.X, circle.Position.Y - circle.Radius / 2);
+
+            return bar;
+        }
     }
+
+
 }
