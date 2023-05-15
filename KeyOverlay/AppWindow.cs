@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,7 +13,7 @@ namespace KeyOverlay
     {
         private readonly RenderWindow _window;
         private readonly List<Key> _keyList = new();
-        private readonly List<RectangleShape> _squareList;
+        private readonly List<CircleShape> _circleList;
         private readonly float _barSpeed;
         private readonly float _ratioX;
         private readonly float _ratioY;
@@ -29,19 +29,24 @@ namespace KeyOverlay
         private readonly List<Drawable> _staticDrawables = new();
         private readonly List<Text> _keyText = new();
         private readonly uint _maxFPS;
+        private readonly int _barSides;
+        private readonly int _rotation;
         private Clock _clock = new();
 
 
         public AppWindow()
-        {
+        {   
+
             var config = ReadConfig();
+            var keySize = uint.Parse(config["keySize"]);
+            var keyAmount = uint.Parse(config["keyAmount"]);
             var windowWidth = config["windowWidth"];
             var windowHeight = config["windowHeight"];
-            _window = new RenderWindow(new VideoMode(uint.Parse(windowWidth!), uint.Parse(windowHeight!)),
+            _window = new RenderWindow(new VideoMode((uint.Parse(windowWidth!) - 100) * keyAmount + keySize, uint.Parse(windowHeight!)),
                 "KeyOverlay", Styles.Default);
 
             //calculate screen ratio relative to original program size for easy resizing
-            _ratioX = float.Parse(windowWidth) / 480f;
+            _ratioX = float.Parse(windowWidth) / 480f ;
             _ratioY = float.Parse(windowHeight) / 960f;
 
             _barSpeed = float.Parse(config["barSpeed"], CultureInfo.InvariantCulture);
@@ -50,6 +55,8 @@ namespace KeyOverlay
             _keyBackgroundColor = CreateItems.CreateColor(config["keyColor"]);
             _barColor = CreateItems.CreateColor(config["barColor"]);
             _maxFPS = uint.Parse(config["maxFPS"]);
+            _barSides = int.Parse(config["barSides"]);
+            _rotation = int.Parse(config["rotation"]);
 
             //get background image if in config
             if (config["backgroundImage"] != "")
@@ -58,7 +65,7 @@ namespace KeyOverlay
                         config["backgroundImage"]))));
 
             //create keys which will be used to create the squares and text
-            var keyAmount = int.Parse(config["keyAmount"]);
+            
             for (var i = 1; i <= keyAmount; i++)
                 try
                 {
@@ -76,21 +83,26 @@ namespace KeyOverlay
                     sw.WriteLine(e.Message);
                 }
 
+            //Resize window automatically with key amount
+            
+
             //create squares and add them to _staticDrawables list
             var outlineColor = CreateItems.CreateColor(config["borderColor"]);
-            var keySize = int.Parse(config["keySize"]);
-            var margin = int.Parse(config["margin"]);
-            _squareList = CreateItems.CreateKeys(keyAmount, _outlineThickness, keySize, _ratioX, _ratioY, margin,
-                _window, _keyBackgroundColor, outlineColor);
-            foreach (var square in _squareList) _staticDrawables.Add(square);
+
+            var margin = int.Parse(config["margin"]) ;
+            _circleList = CreateItems.CreateKeys((int) keyAmount, _outlineThickness, keySize, _ratioX, _ratioY, (int)margin,
+             _window, _keyBackgroundColor, outlineColor);
+            foreach (var circle in _circleList) _staticDrawables.Add(circle);
 
             //create text and add it ti _staticDrawables list
+
             _fontColor = CreateItems.CreateColor(config["fontColor"]);
             _pressFontColor = CreateItems.CreateColor(config["pressFontColor"]);
             for (var i = 0; i < keyAmount; i++)
             {
-                var text = CreateItems.CreateText(_keyList.ElementAt(i).KeyLetter, _squareList.ElementAt(i),
-                    _fontColor, false);
+               var text = CreateItems.CreateText(_keyList.ElementAt(i).KeyLetter, _circleList.ElementAt(i),
+                _fontColor, false);
+
                 _keyText.Add(text);
                 _staticDrawables.Add(text);
             }
@@ -121,7 +133,7 @@ namespace KeyOverlay
 
             //Creating a sprite for the fading effect
             var fadingList = Fading.GetBackgroundColorFadingTexture(_backgroundColor, _window.Size.X, _ratioY);
-            var fadingTexture = new RenderTexture(_window.Size.X, (uint)(255 * 2 * _ratioY));
+            var fadingTexture = new RenderTexture(_window.Size.X, (uint)(255 * 10 * _ratioY));
             fadingTexture.Clear(Color.Transparent);
             if (_fading)
                 foreach (var sprite in fadingList)
@@ -135,7 +147,7 @@ namespace KeyOverlay
                 _window.Clear(_backgroundColor);
                 _window.DispatchEvents();
                 //if no keys are being held fill the square with bg color
-                foreach (var square in _squareList) square.FillColor = _keyBackgroundColor;
+                foreach (var square in _circleList) square.FillColor = _keyBackgroundColor;
                 //if a key is being held, change the key bg and increment hold variable of key
                 foreach (var key in _keyList)
                     if (key.isKey && Keyboard.IsKeyPressed(key.KeyboardKey) ||
@@ -144,7 +156,7 @@ namespace KeyOverlay
                         key.Hold++;
                         if(_keyText.ElementAt(_keyList.IndexOf(key)).FillColor != _pressFontColor)
                             _keyText.ElementAt(_keyList.IndexOf(key)).FillColor = _pressFontColor;
-                        _squareList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
+                        _circleList.ElementAt(_keyList.IndexOf(key)).FillColor = _barColor;
                     }
                     else
                     {
@@ -153,7 +165,7 @@ namespace KeyOverlay
                         key.Hold = 0;
                     }
 
-                MoveBars(_keyList, _squareList);
+                MoveBars(_keyList, _circleList);
 
                 //draw bg from image if not null
 
@@ -166,7 +178,7 @@ namespace KeyOverlay
                     if (_counter)
                     {
                         var text = CreateItems.CreateText(Convert.ToString(key.Counter),
-                            _squareList.ElementAt(_keyList.IndexOf(key)),
+                            _circleList.ElementAt(_keyList.IndexOf(key)),
                             _fontColor, true);
                         _window.Draw(text);
                     }
@@ -181,33 +193,37 @@ namespace KeyOverlay
             }
         }
 
+
         /// <summary>
         /// if a key is a new input create a new bar, if it is being held stretch it and move all bars up
         /// </summary>
-        private void MoveBars(List<Key> keyList, List<RectangleShape> squareList)
+
+
+private void MoveBars(List<Key> keyList, List<CircleShape> circleList)
+{
+    var moveDist = _clock.Restart().AsSeconds() * _barSpeed;
+
+    foreach (var key in keyList)
+    {
+        if (key.Hold == 1)
         {
-            var moveDist = _clock.Restart().AsSeconds() * _barSpeed;
-
-            foreach (var key in keyList)
-            {
-                if (key.Hold == 1)
-                {
-                    var rect = CreateItems.CreateBar(squareList.ElementAt(keyList.IndexOf(key)), _outlineThickness,
-                        moveDist);
-                    key.BarList.Add(rect);
-                    key.Counter++;
-                }
-                else if (key.Hold > 1)
-                {
-                    var rect = key.BarList.Last();
-                    rect.Size = new Vector2f(rect.Size.X, rect.Size.Y + moveDist);
-                }
-
-                foreach (var rect in key.BarList)
-                    rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - moveDist);
-                if (key.BarList.Count > 0 && key.BarList.First().Position.Y + key.BarList.First().Size.Y < 0)
-                    key.BarList.RemoveAt(0);
-            }
+            var rect = CreateItems.CreateBar(circleList.ElementAt(keyList.IndexOf(key)), _outlineThickness, moveDist, _barColor, _barSides, (int)_rotation);
+            key.BarList.Add(rect);
+            key.Counter++;
         }
+        else if (key.Hold > 1)
+        {
+            var rect = CreateItems.CreateBar(circleList.ElementAt(keyList.IndexOf(key)), _outlineThickness, moveDist, _barColor, _barSides, (int)_rotation);
+            key.BarList.Add(rect);
+
+        }
+
+        foreach (var rect in key.BarList)
+            rect.Position = new Vector2f(rect.Position.X, rect.Position.Y - moveDist);
+        if (key.BarList.Count > 0 && key.BarList.First().Position.Y + key.BarList.First().Radius < 0)
+            key.BarList.RemoveAt(0);
+    }
+}
+
     }
 }
