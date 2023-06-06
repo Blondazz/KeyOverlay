@@ -32,9 +32,9 @@ namespace KeyOverlay
         private Clock _clock = new();
 
 
-        public AppWindow()
+        public AppWindow(string configFileName)
         {
-            var config = ReadConfig();
+            var config = ReadConfig(configFileName);
             var windowWidth = config["windowWidth"];
             var windowHeight = config["windowHeight"];
             _window = new RenderWindow(new VideoMode(uint.Parse(windowWidth!), uint.Parse(windowHeight!)),
@@ -101,10 +101,12 @@ namespace KeyOverlay
                 _counter = true;
         }
 
-        private Dictionary<string, string> ReadConfig()
+        private Dictionary<string, string> ReadConfig(string configFileName)
         {
             var objectDict = new Dictionary<string, string>();
-            var file = File.ReadLines("config.txt").ToArray();
+            var file = configFileName == null ? 
+                File.ReadLines("config.txt").ToArray() : 
+                File.ReadLines(configFileName).ToArray();
             foreach (var s in file) objectDict.Add(s.Split("=")[0], s.Split("=")[1]);
             return objectDict;
         }

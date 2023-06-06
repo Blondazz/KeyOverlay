@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace KeyOverlay
 {
@@ -10,7 +11,7 @@ namespace KeyOverlay
             AppWindow window;
             try
             {
-                window = new AppWindow();
+                window = new AppWindow(args.FirstOrDefault());
             }
             catch (Exception e)
             {
