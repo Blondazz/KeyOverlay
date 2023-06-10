@@ -42,12 +42,21 @@ maxFPS - Sets the target FPS for the program to run
 
 based on a similar app by an unknown author (if you are the author dm me so I can credit you)
 
+# MacOS
+
+## Setup
+
+1. Unzip `KeyOverlay-macos-latest.zip` into a folder.
+2. Using the terminal cd inside the unzipped folder.
+3. run `KeyOverlay` in terminal (`./KeyOverlay`).
+4. Allow the terminal `Input Monitoring` permission.
+
 # Linux
 
 ## Setup
 
 1. Unzip `KeyOverlay-ubuntu-latest.zip` into a folder.
-2. cd into the folder unzipped folder
+2. cd into the unzipped folder
 3. make `KeyOverlay` executable using `chmod`
 4. run `KeyOverlay` in terminal (`KeyOverlay`)
 
