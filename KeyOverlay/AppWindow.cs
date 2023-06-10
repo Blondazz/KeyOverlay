@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -103,10 +104,11 @@ namespace KeyOverlay
 
         private Dictionary<string, string> ReadConfig(string configFileName)
         {
+            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var objectDict = new Dictionary<string, string>();
             var file = configFileName == null ? 
-                File.ReadLines("config.txt").ToArray() : 
-                File.ReadLines(configFileName).ToArray();
+                File.ReadLines(Path.Combine(assemblyPath ?? "", "config.txt")).ToArray() :
+                File.ReadLines(Path.Combine(assemblyPath ?? "", configFileName)).ToArray();
             foreach (var s in file) objectDict.Add(s.Split("=")[0], s.Split("=")[1]);
             return objectDict;
         }
