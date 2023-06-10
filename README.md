@@ -13,9 +13,8 @@ IF YOU ARE HAVING PROBLEMS WITH THE PROGRAM WHEN OSU! IS ON FULLSCREEN, TRY USIN
 ## Setup
 
 1. Unzip `KeyOverlay-macos-latest.zip` into a folder.
-2. Using the terminal cd inside the unzipped folder.
-3. run `KeyOverlay` in terminal (`./KeyOverlay`).
-4. Allow the terminal `Input Monitoring` permission.
+2. Double click the KeyOverlay file or Using the terminal cd inside the unzipped folder and run `KeyOverlay` in terminal (`./KeyOverlay`).
+3. Allow the terminal `Input Monitoring` permission.
 
 # Linux
 
